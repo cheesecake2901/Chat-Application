@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class Message {
     private Long id;
-    private String SenderName;
-    private String Message;
+    private String senderName;
+    private String content;
 }
