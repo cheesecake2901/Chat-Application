@@ -68,10 +68,11 @@ img {
 
 
 .chats {
-    padding: 30px 15px 0 25px;
+    padding: 0px 15px 0 25px;
 }
 
 .msg-page {
+    height: 500px;
     max-height: 500px;
     overflow-y: auto;
 }
