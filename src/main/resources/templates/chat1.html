@@ -8,41 +8,65 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-<div id= "username">
+<div id= "username-page">
+    <div class="user-page-container">
+        <div class ="login">
+            <h1>Login</h1>
+            <form>
+                <label>Username</label>
+                <div class="input-group">
+
+                    <input id="senderInput" type="text" class="form-control" placeholder="Enter Username" />
+                    <button type="button" onclick="connect()">Enter</button>
+                </div>
 
 
-</div>
-<div id="chat" class="container">
-    <div class="msg-header">
-        <div class="container1">
-            <img src="user.png" class="msgimg" />
-            <div class="input-group">
-                <input id="senderInput" type="text" class="form-control" placeholder="Write Name..." />
-            </div>
+            </form>
         </div>
     </div>
-    <div class="chat-page">
-        <div class="msg-inbox">
-            <div class="chats">
-                <div id="msg-page" class="msg-page"></div>
-            </div>
-            <div class="msg-bottom">
+</div>
+
+<div id="chat-page" class="hidden" >
+    <div class="container">
+        <div class="msg-header">
+            <div class="container1">
+                <img src="user.png" class="msgimg" />
                 <div class="input-group">
-                    <input id="messageInput" type="text" class="form-control" placeholder="Write message..." />
-                    <button id="sendMessage">Send</button>
+                    <!--<input id="senderInput" type="text" class="form-control" placeholder="Write Name..." />-->
+                </div>
+            </div>
+        </div>
+        <div class="chat-page">
+            <div class="msg-inbox">
+                <div class="chats">
+                    <div id="msg-page" class="msg-page"></div>
+                </div>
+                <div class="msg-bottom">
+                    <div class="input-group">
+                        <input id="messageInput" type="text" class="form-control" placeholder="Write message..." />
+                        <button id="sendMessage">Send</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <script>
+    var usernamePage = document.querySelector("#username-page");
+    var chatPage = document.querySelector("#chat-page");
     var stompClient = null;
+    var senderName = null;
 
     function setConnected(connected) {
         document.getElementById("sendMessage").disabled = !connected;
     }
 
     function connect() {
+        senderName = document.getElementById("senderInput").value.trim();
+        if(senderName != null){
+            usernamePage.classList.add("hidden");
+            chatPage.classList.remove("hidden");
+        }
         var socket = new SockJS("/chat");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -58,7 +82,6 @@
     function showMessage(message) {
         var chatContainer = document.getElementById("msg-page");
         var messageElement = document.createElement("div");
-        var senderName = document.getElementById("senderInput").value;
 
         if (message.senderName === senderName) {
             messageElement.className = "outgoing-chats";
@@ -176,6 +199,7 @@
     //------------------------------------------------
 
     window.onload = connect;
+
 </script>
 </body>
 </html>

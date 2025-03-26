@@ -2,8 +2,37 @@
 * {
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
-}
 
+}
+body {
+
+}
+button {
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 20%;
+}
+.user-page-container {
+    height: 100vh; /* Ganze Bildschirmhöhe */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.login {
+    height: 320px;
+    width: 390px;
+    background-color: #edf0ef;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
+    position: relative;
+}
 /* Styling the main container */
 .container {
     width: 80%;
@@ -37,6 +66,10 @@ img {
     float: left;
 }
 
+.hidden {
+    display:none
+}
+
 .container1 {
     width: 270px;
     height: auto;
@@ -57,6 +90,7 @@ img {
 /* Styling the inbox */
 .chat-page {
     padding: 0 0 50px 0;
+
 }
 
 .msg-inbox {
@@ -69,12 +103,14 @@ img {
 
 .chats {
     padding: 0px 15px 0 25px;
+    background-color: white;
 }
 
 .msg-page {
     height: 500px;
     max-height: 500px;
     overflow-y: auto;
+    background-color: white;
 }
 
 /* Styling the msg-bottom container */
@@ -86,18 +122,23 @@ img {
 }
 /* Styling the input field */
 .input-group {
-    float: right;
-    margin-top: 13px;
-    margin-bottom: 13px;
-    margin-right: 20px;
-    outline: none !important;
-    border-radius: 20px;
-    width: 61% !important;
-    background-color: #fff;
-    position: relative;
     display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center; /* Stellt sicher, dass die Elemente vertikal zentriert sind */
+    gap: 10px; /* Fügt Abstand zwischen den Elementen hinzu */
+}
+
+.input-group input {
+    flex-grow: 1; /* Lässt das Eingabefeld den verfügbaren Platz nutzen */
+    height: 40px; /* Einheitliche Höhe */
+    padding: 5px;
+    font-size: 16px;
+}
+
+.input-group button {
+    height: 40px; /* Gleiche Höhe wie das Eingabefeld */
+    padding: 5px 15px;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 .input-group>.form-control {
