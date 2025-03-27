@@ -74,9 +74,11 @@
             stompClient.subscribe("/topic/messages", function (message) {
                 showMessage(JSON.parse(message.body));
             });
+            startSessionConnection() //TODO Fix later
         }, function (error) {
             console.error("WebSocket Error: ", error);
         });
+
     }
 
     function showMessage(message) {
@@ -198,7 +200,47 @@
 
     //------------------------------------------------
 
+    //TODO: Dont do THIS, use the other socket if possible
 
+
+
+    let username = getCookie("username");
+
+    function connectSession(){
+        let sessionTrackerSocket = new SockJS("/session?username=" + encodeURIComponent(username));
+        stompClient = Stomp.over(sessionTrackerSocket);
+        stompClient.connect({}, function (frame) {
+            console.info("Session connect successfully, with user " + username);
+        });
+    }
+
+    function startSessionConnection(){
+
+        if(username === null){
+            console.error("No username found in cookie, cant establish session");
+            //TODO: Only create socket when there is a username, will fix this later
+        }
+        else{
+            connectSession();
+        }
+    }
+
+
+
+
+
+
+
+
+    function getActiveSessionCount(){
+        fetch("/session")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Active Sessions: " + data);
+            });
+    }
+
+    setInterval(getActiveSessionCount, 5000);
 
 </script>
 </body>
