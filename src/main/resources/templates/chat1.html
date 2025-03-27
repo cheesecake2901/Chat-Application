@@ -17,7 +17,7 @@
                 <div class="input-group">
 
                     <input id="senderInput" type="text" class="form-control" placeholder="Enter Username" />
-                    <button type="button" onclick="connect()">Enter</button>
+                    <button type="button" onclick="connect(); startSessionConnection();">Enter</button>
                 </div>
 
 
@@ -74,10 +74,11 @@
             stompClient.subscribe("/topic/messages", function (message) {
                 showMessage(JSON.parse(message.body));
             });
-            startSessionConnection() //TODO Fix later
+
         }, function (error) {
             console.error("WebSocket Error: ", error);
         });
+
 
     }
 
@@ -204,24 +205,21 @@
 
 
 
-    let username = getCookie("username");
 
-    function connectSession(){
+
+    function connectSession(username){
         let sessionTrackerSocket = new SockJS("/session?username=" + encodeURIComponent(username));
-        stompClient = Stomp.over(sessionTrackerSocket);
-        stompClient.connect({}, function (frame) {
-            console.info("Session connect successfully, with user " + username);
-        });
+        console.info("Session connect successfully, with user " + username);
     }
 
     function startSessionConnection(){
-
+        let username = getCookie("username");
         if(username === null){
             console.error("No username found in cookie, cant establish session");
             //TODO: Only create socket when there is a username, will fix this later
         }
         else{
-            connectSession();
+            connectSession(username);
         }
     }
 
