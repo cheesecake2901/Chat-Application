@@ -236,6 +236,11 @@
             .then(data => {
                 console.log("Active Sessions: " + data);
             });
+        fetch("/activeUsers")
+            .then(response => response.json())
+            .then(data => {
+                console.log("Active Sessions: " + data);
+            });
     }
 
     setInterval(getActiveSessionCount, 5000);

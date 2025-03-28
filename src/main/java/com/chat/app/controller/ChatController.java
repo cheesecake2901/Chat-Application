@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
+
 
 @Controller
 public class ChatController {
@@ -37,6 +39,11 @@ public class ChatController {
     @GetMapping("/session")
     public ResponseEntity<Integer> getActiveSessionCount(){
         return ResponseEntity.ok(chatWebSocketHandler.getSessions().size());
+    }
+
+    @GetMapping("/activeUsers")
+    public ResponseEntity<Set<String>> getActiveUsers(){
+        return ResponseEntity.ok(chatWebSocketHandler.getActiveUsers());
     }
 
 }

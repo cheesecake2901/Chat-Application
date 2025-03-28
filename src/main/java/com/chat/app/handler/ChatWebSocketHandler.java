@@ -54,4 +54,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     public Set<WebSocketSession> getSessions(){
         return sessions;
     }
+
+    public Set<String> getActiveUsers(){
+        return users;
+    }
 }
