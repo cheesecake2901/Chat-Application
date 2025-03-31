@@ -8,7 +8,7 @@ Java, Spring Boot, WebSocket, HTML, CSS, JavaScript
 ## Installation & Nutzung
 1. **Projekt klonen:**  
    ```bash
-   git clone https://github.com/dein-repo/chat-application.git
+   git clone https://github.com/cheesecake2901/Chat-Application
    ```
 2. **Backend starten:**  
    Navigiere in das Projektverzeichnis und starte die Anwendung mit:
