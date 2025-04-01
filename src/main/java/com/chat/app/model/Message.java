@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 public class Message {
     private Long id;
     private String senderName;
+    private String receiverName;
     private String content;
 }
