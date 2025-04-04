@@ -12,6 +12,10 @@ body{
     display: none !important;
 }
 
+.custom-row {
+    position: sticky;
+    margin-top: 20%;
+}
 
 .chat-messages {
     display: flex;
