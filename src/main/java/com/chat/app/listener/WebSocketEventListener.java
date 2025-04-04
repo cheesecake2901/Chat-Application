@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.Message;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
@@ -18,9 +19,11 @@ import java.util.Map;
 public class WebSocketEventListener {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
     private final ActiveUserSessionService activeUserSessionService;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public WebSocketEventListener(ActiveUserSessionService activeUserSessionService) {
+    public WebSocketEventListener(ActiveUserSessionService activeUserSessionService, SimpMessagingTemplate messagingTemplate) {
         this.activeUserSessionService = activeUserSessionService;
+        this.messagingTemplate = messagingTemplate;
     }
 
 
@@ -47,6 +50,7 @@ public class WebSocketEventListener {
             if (username != null && sessionId != null) {
                 activeUserSessionService.addSession(sessionId, username);
                 logger.info("User connected: " + username + " with session ID: " + sessionId);
+                sendUpdatedUserList();
             } else {
                 logger.warn("Session ID or username is null");
             }
@@ -61,5 +65,11 @@ public class WebSocketEventListener {
         String sessionId = event.getSessionId();
         activeUserSessionService.removeSession(sessionId);
         logger.info("User disconnected with session ID: " + sessionId);
+        sendUpdatedUserList();
+    }
+
+    private void sendUpdatedUserList() {
+        logger.info(activeUserSessionService.getActiveUsers().toString());
+        messagingTemplate.convertAndSend("/topic/activeUsers", activeUserSessionService.getActiveUsers());
     }
 }

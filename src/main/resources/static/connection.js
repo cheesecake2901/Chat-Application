@@ -21,12 +21,27 @@ function connect() {
         stompClient.subscribe("/topic/messages", function (message) {
             showMessage(JSON.parse(message.body));
         });
+        stompClient.subscribe("/topic/activeUsers", function (message) {
+            updateUserList(JSON.parse(message.body));
+        });
+        fetchActiveUsers();
 
     }, function (error) {
         console.error("WebSocket Error: ", error);
     });
 
 
+}
+
+function fetchActiveUsers() {
+    fetch('/activeUsers')
+        .then(response => response.json())
+        .then(data => {
+        updateUserList(data);
+    })
+        .catch(error => {
+        console.error("Error fetching active users: ", error);
+    });
 }
 
 function showMessage(message) {
@@ -152,14 +167,11 @@ senderInput.addEventListener("change", function(){
 //------------------------------------------------
 
 // Testing for list of active users, TODO: Delete later
-function getActiveSessionCount(){
-    fetch("/activeUsers")
-        .then(response => response.json())
-        .then(data => {
+function updateUserList(userList){
         var otherUsernames = document.getElementById("otherUsers");
         otherUsernames.innerHTML = "";
 
-        data.forEach(username => {
+        userList.forEach(username => {
             if(username != senderInput.value){
                 var userList = document.createElement("div");
                 userList.innerHTML = `
@@ -180,11 +192,7 @@ function getActiveSessionCount(){
                 });
                 otherUsernames.appendChild(userList);
             }
-
-        });
-        console.log("Active Sessions: " + data);
     });
 }
 
-setInterval(getActiveSessionCount, 1000);
 
