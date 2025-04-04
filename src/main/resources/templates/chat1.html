@@ -166,7 +166,7 @@
             return;
         }
 
-        var chatMessage = { senderName: senderName, content: content };
+        var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
         stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
         document.getElementById("messageInput").value = "";
     }
