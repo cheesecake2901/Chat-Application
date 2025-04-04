@@ -20,7 +20,7 @@ public class CustomChannelInterceptor implements ChannelInterceptor {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
         if (StompCommand.CONNECT.equals(accessor.getCommand())) {
             String username = accessor.getFirstNativeHeader("username");
-            // Optionally, set the user in the accessor so it's available throughout the session.
+            // Set the user in the accessor so it's available throughout the session.
             logger.info("User connected via Interceptor: " + username);
             accessor.getSessionAttributes().put("username", username);
 
