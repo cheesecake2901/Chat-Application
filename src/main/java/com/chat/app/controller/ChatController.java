@@ -41,9 +41,9 @@ public class ChatController {
     }
 
     @MessageMapping("/sendGroupchat")
-    @SendTo("/groupchat")
+    @SendTo("/topic/groupchat")
     public Message sendGroupchatMessage(Message message){
-        logger.info("Sending Groupchat");
+        logger.info("Sending Groupchat: " + message);
         return message;
     }
 

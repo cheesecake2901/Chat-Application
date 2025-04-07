@@ -21,13 +21,28 @@ function connect() {
         stompClient.subscribe("/user/queue/messages", function (message) {
             showMessage(JSON.parse(message.body));
         });
-        stompClient.subscribe("/groupchat", function (message) {
+        stompClient.subscribe("/topic/groupchat", function (message) {
             showMessage(JSON.parse(message.body));
         });
+        stompClient.subscribe("/topic/activeUsers", function (message) {
+            updateUserList(JSON.parse(message.body));
+        });
+        fetchActiveUsers();
 
 
     }, function (error) {
         console.error("WebSocket Error: ", error);
+    });
+}
+
+function fetchActiveUsers() {
+    fetch('/activeUsers')
+        .then(response => response.json())
+        .then(data => {
+        updateUserList(data);
+    })
+        .catch(error => {
+        console.error("Error fetching active users: ", error);
     });
 }
 
@@ -74,7 +89,8 @@ function sendMessage() {
         return;
     }
     var senderName = document.getElementById("senderInput").value;
-    var recipientName = "234"; // TODO: Change to current recipient when switching chats
+    var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
+    //var recipientName = "User123"; <--- Example
     var content = document.getElementById("messageInput").value;
     if (!senderName || !content) {
         alert("Please enter a name and a message!");
@@ -162,14 +178,11 @@ senderInput.addEventListener("change", function(){
 //------------------------------------------------
 
 // Testing for list of active users, TODO: Delete later
-function getActiveSessionCount(){
-    fetch("/activeUsers")
-        .then(response => response.json())
-        .then(data => {
+function updateUserList(userList){
         var otherUsernames = document.getElementById("otherUsers");
         otherUsernames.innerHTML = "";
 
-        data.forEach(username => {
+        userList.forEach(username => {
             if(username != senderInput.value){
                 var userList = document.createElement("div");
                 userList.innerHTML = `
@@ -190,11 +203,7 @@ function getActiveSessionCount(){
                 });
                 otherUsernames.appendChild(userList);
             }
-
-        });
-        console.log("Active Sessions: " + data);
     });
 }
 
-setInterval(getActiveSessionCount, 1000);
 
