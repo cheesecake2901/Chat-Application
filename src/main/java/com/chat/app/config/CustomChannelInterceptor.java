@@ -1,5 +1,6 @@
 package com.chat.app.config;
 
+import com.chat.app.principal.StompPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -18,12 +19,13 @@ public class CustomChannelInterceptor implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+        if (accessor != null && StompCommand.CONNECT.equals(accessor.getCommand())) {
             String username = accessor.getFirstNativeHeader("username");
             // Set the user in the accessor so it's available throughout the session.
             logger.info("User connected via Interceptor: " + username);
             accessor.getSessionAttributes().put("username", username);
 
+            accessor.setUser(new StompPrincipal(username));
             //accessor.setUser(new UsernamePasswordAuthenticationToken(username, null));
         }
         return message;

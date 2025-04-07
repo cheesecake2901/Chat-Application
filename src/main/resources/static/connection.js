@@ -18,20 +18,23 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({username: senderName}, function (frame) {
         setConnected(true);
-        stompClient.subscribe("/topic/messages", function (message) {
+        stompClient.subscribe("/user/queue/messages", function (message) {
             showMessage(JSON.parse(message.body));
         });
+        stompClient.subscribe("/groupchat", function (message) {
+            showMessage(JSON.parse(message.body));
+        });
+
 
     }, function (error) {
         console.error("WebSocket Error: ", error);
     });
-
-
 }
 
 function showMessage(message) {
     var chatContainer = document.getElementById("msg-page");
     var messageElement = document.createElement("div");
+    console.log("Received message: ", message);
 
     if (message.senderName === senderName) {
         messageElement.className = "outgoing-chats";
@@ -70,9 +73,8 @@ function sendMessage() {
         alert("Not connected to WebSocket server!");
         return;
     }
-
     var senderName = document.getElementById("senderInput").value;
-    var recipientName = "Groupchat"; // TODO: Change to group chat name
+    var recipientName = "234"; // TODO: Change to current recipient when switching chats
     var content = document.getElementById("messageInput").value;
     if (!senderName || !content) {
         alert("Please enter a name and a message!");
@@ -80,7 +82,15 @@ function sendMessage() {
     }
 
     var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
-    stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
+
+    if(recipientName == "Groupchat"){
+        console.info("Sending Groupchat")
+        stompClient.send("/app/sendGroupchat", {}, JSON.stringify(chatMessage));
+    }
+    else{
+        console.info("Sending Private Chat")
+        stompClient.send("/app/sendMessage", {}, JSON.stringify(chatMessage));
+    }
     document.getElementById("messageInput").value = "";
 }
 
