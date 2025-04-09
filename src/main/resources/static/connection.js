@@ -51,25 +51,50 @@ function fetchActiveUsers() {
 }
 
 function addMessage(senderName, recipientName, content){
-    let messageKey = senderName + recipientName;
+    let names = [senderName, recipientName].sort();
+    let messageKey = names.join("");
     
+    if(recipientName == "Groupchat"){
+        messageKey = "Groupchat";
+        console.log("Groupchat message detected, changing MessageKey")
+    }
+
+    console.log("MessageKey: " + messageKey)
+
     if (!messageList[messageKey]){
         messageList[messageKey] = [];
     }
 
-    message = [senderName, recipientName, content]
+    let message = {
+        senderName: senderName,
+        recipientName: recipientName,
+        content: content
+    };
+
     messageList[messageKey].push(message)
     console.info("Added message to messageList: " + message)
 }
 
 
 function showMessageList(senderName, recipientName){
-    let messageKey = senderName + recipientName;
+    let names = [senderName, recipientName].sort();
+    let messageKey = names.join("");
 
+    
+
+    if(recipientName == "Groupchat"){
+        messageKey = "Groupchat";
+        console.log("Groupchat message detected, changing MessageKey")
+    }
+
+    console.log("MessageKey: " + messageKey)
     if(messageList[messageKey]){
-        console.log("Messages between " + senderName + " and " + recipientName);
-        messageList[messageKey].forEach((message, index) => console.log(`Message ${index + 1}: ${message[2]} (from ${message[0]} to ${message[1]})`)
-    );
+        console.log("Messages between " + senderName + " and " + recipientName + " with Key " + messageKey);
+        messageList[messageKey].forEach((message, index) => console.log(message)
+        );
+        //messageList[messageKey].forEach((message, index) => console.log(`Message ${index + 1}: ${message[2]} (from ${message[0]} to ${message[1]})`)
+        messageList[messageKey].forEach((message, index) => showMessage(message)
+        );
     }
 
 }
@@ -79,6 +104,8 @@ function showMessage(message) {
     var chatContainer = document.getElementById("msg-page");
     var messageElement = document.createElement("div");
     console.log("Received message: ", message);
+
+    addMessage(message.senderName, message.recipientName, message.content)
 
     if (message.senderName === senderName) {
         messageElement.className = "outgoing-chats";
@@ -118,8 +145,9 @@ function sendMessage() {
         return;
     }
     var senderName = document.getElementById("senderInput").value;
-    var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
+    //var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
     //var recipientName = "User123"; <--- Example
+    var recipientName = selectedRecipient;
     var content = document.getElementById("messageInput").value;
     if (!senderName || !content) {
         alert("Please enter a name and a message!");
@@ -128,8 +156,8 @@ function sendMessage() {
 
     var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
 
-    addMessage(senderName, recipientName, content)
-    showMessageList(senderName, recipientName)
+    
+    
 
     if(recipientName == "Groupchat"){
         console.info("Sending Groupchat")
@@ -230,12 +258,33 @@ function updateUserList(userList){
                 const userElement = userList.querySelector(".user-entry");
                 userElement.addEventListener("click", function () {
                     const clickedUsername = this.getAttribute("data-username");
-                    console.log("Geklickt:", clickedUsername);
 
                     selectedRecipient = clickedUsername;
                     console.log("Selected recipient changed to:", selectedRecipient);
+                    let chatTitle = document.querySelector(".chat-title");
+                    chatTitle.textContent = selectedRecipient;
 
+                    // TODO: Hide/Delete old messages
+
+                    console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
+                    showMessageList(senderName, selectedRecipient)
                 });
+
+                const groupChatElement = document.querySelector(".groupchat-user");
+                console.log("Event listener added to:", groupChatElement);
+                groupChatElement.addEventListener("click", function(){
+                    
+                    selectedRecipient = "Groupchat"
+                    console.log("Selected recipient changed to:", selectedRecipient);
+                    let chatTitle = document.querySelector(".chat-title");
+                    chatTitle.textContent = selectedRecipient;
+                    
+                    // TODO: Hide/Delete old messages
+                    
+                    console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
+                    showMessageList(senderName, selectedRecipient)
+                })
+
                 otherUsernames.appendChild(userList);
             }
     });
