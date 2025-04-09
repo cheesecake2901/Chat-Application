@@ -2,6 +2,10 @@ var usernamePage = document.querySelector("#username-page");
 var chatPage = document.querySelector("#chat-page");
 var stompClient = null;
 var senderName = null;
+var selectedRecipient = "Groupchat";
+var messageList = [];
+
+
 
 function setConnected(connected) {
     document.getElementById("sendMessage").disabled = !connected;
@@ -45,6 +49,31 @@ function fetchActiveUsers() {
         console.error("Error fetching active users: ", error);
     });
 }
+
+function addMessage(senderName, recipientName, content){
+    let messageKey = senderName + recipientName;
+    
+    if (!messageList[messageKey]){
+        messageList[messageKey] = [];
+    }
+
+    message = [senderName, recipientName, content]
+    messageList[messageKey].push(message)
+    console.info("Added message to messageList: " + message)
+}
+
+
+function showMessageList(senderName, recipientName){
+    let messageKey = senderName + recipientName;
+
+    if(messageList[messageKey]){
+        console.log("Messages between " + senderName + " and " + recipientName);
+        messageList[messageKey].forEach((message, index) => console.log(`Message ${index + 1}: ${message[2]} (from ${message[0]} to ${message[1]})`)
+    );
+    }
+
+}
+
 
 function showMessage(message) {
     var chatContainer = document.getElementById("msg-page");
@@ -98,6 +127,9 @@ function sendMessage() {
     }
 
     var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
+
+    addMessage(senderName, recipientName, content)
+    showMessageList(senderName, recipientName)
 
     if(recipientName == "Groupchat"){
         console.info("Sending Groupchat")
@@ -199,7 +231,10 @@ function updateUserList(userList){
                 userElement.addEventListener("click", function () {
                     const clickedUsername = this.getAttribute("data-username");
                     console.log("Geklickt:", clickedUsername);
-                    // Hier kannst du machen, was du willst – z.B. Nachricht senden etc.
+
+                    selectedRecipient = clickedUsername;
+                    console.log("Selected recipient changed to:", selectedRecipient);
+
                 });
                 otherUsernames.appendChild(userList);
             }
