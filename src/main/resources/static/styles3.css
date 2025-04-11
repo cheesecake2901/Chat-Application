@@ -17,6 +17,14 @@ body{
     margin-top: 20%;
 }
 
+.chat-color-left {
+    background-color: #F0F0F0 !important;
+}
+
+.chat-color-right {
+    background-color: #EBEBEB !important;
+}
+
 .chat-messages {
     display: flex;
     flex-direction: column;

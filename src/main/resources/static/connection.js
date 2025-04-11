@@ -112,27 +112,25 @@ function showMessage(message, isMessageHistory) {
     
 
     if (message.senderName === senderName) {
-        messageElement.className = "outgoing-chats";
         messageElement.innerHTML =
-        `<div class="chat-message-right mb-4">
-          <div>
-            <img src="user.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-              <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
-              </div>
-              <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-            <div class="font-weight-bold mb-1">You</div>
-            ${message.content}
-          </div>
-        </div>`
+                    `<div class="chat-message-right mb-4">
+                      <div>
+                        <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
+                        <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
+                      </div>
+                      <div class="chat-color-right flex-shrink-1 rounded py-2 px-3 mr-3">
+                        <div class="font-weight-bold mb-1">You</div>
+                        ${message.content}
+                      </div>
+                    </div>`
     } else {
-        messageElement.className = "received-chats";
         messageElement.innerHTML = `
                     <div class="chat-message-left pb-4">
                       <div>
-                        <img src="user.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
+                        <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
                         <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
                       </div>
-                      <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                      <div class="chat-color-left flex-shrink-1 rounded py-2 px-3 ml-3">
                         <div class="font-weight-bold mb-1">${message.senderName}</div>
                         ${message.content}
                       </div>
@@ -258,7 +256,7 @@ function updateUserList(userList){
                 var userList = document.createElement("div");
                 userList.innerHTML = `
                         <a class="list-group-item list-group-item-action border-0 rounded-pill mt-2 user-entry" data-username="${username}">
-                            <div class="d-flex align-items-start">
+                            <div class="d-flex align-items-center">
                                 <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
                                     <div class="flex-grow-1 ml-3">
                                     ${username}
