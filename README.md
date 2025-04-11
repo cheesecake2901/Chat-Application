@@ -1,5 +1,5 @@
 
-<img src="/screenshot.png" width="350" height="450">
+<img src="/Screenshot.png" width="350" height="450">
 
 
 # Chat-Application
