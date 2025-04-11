@@ -61,3 +61,16 @@ body{
 .border-top {
     border-top: 1px solid #dee2e6!important;
 }
+.user-entry.active::after {
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: blue;
+}
+.user-entry {
+    position: relative;
+}

@@ -24,22 +24,24 @@ function connect() {
         setConnected(true);
         stompClient.subscribe("/user/queue/messages", function (message) {
             message = JSON.parse(message.body);
-
+            console.warn("Private message, selectedRec: " + selectedRecipient)
             if(selectedRecipient != "Groupchat"){
                 showMessage(message,  false);
             }
             else{
                 addMessage(message.senderName, message.recipientName, message.content)
+                newMessageIcon(message.senderName)
             }
         });
         stompClient.subscribe("/topic/groupchat", function (message) {
             message = JSON.parse(message.body);
-
-            if(message.recipientName == "Groupchat"){
+            console.warn("Groupchat message, selectedRec: " + selectedRecipient)
+            if(selectedRecipient == "Groupchat"){
                 showMessage(message,  false);
             }
             else{
-                addMessage(message.senderName, message.recipientName, message.content)
+                addMessage(message.senderName, message.recipientName, message.content);
+                newMessageIcon("Groupchat");
             }
         });
         stompClient.subscribe("/topic/activeUsers", function (message) {
@@ -52,6 +54,41 @@ function connect() {
         console.error("WebSocket Error: ", error);
     });
 }
+
+
+function newMessageIcon(username){
+    console.warn("New Message Icon")
+    var userElement = document.querySelector(`[data-username="${username}"]`);
+    if (userElement) {
+        var flexDiv = userElement.querySelector('.d-flex');
+        var blueDot = document.createElement("span");
+        blueDot.className = "blue-dot";
+        blueDot.style.width = "15px";
+        blueDot.style.height = "15px";
+        blueDot.style.borderRadius = "50%";
+        blueDot.style.background = "#0d92f9";
+        userElement.appendChild(blueDot);
+        userElement.style.position = "relative";
+        blueDot.style.position = "absolute";
+        blueDot.style.right = "20%";
+        blueDot.style.top = "50%";
+        blueDot.style.transform = "translateY(-50%)";
+    }
+    else{
+        console.error("Could not find user element with name " + username)
+    }
+}
+
+function removeMessageIcon(username) {
+    var userElement = document.querySelector(`[data-username="${username}"]`);
+    if (userElement) {
+        var blueDot = userElement.querySelector('.blue-dot');
+        if (blueDot) {
+            userElement.removeChild(blueDot);
+        }
+    }
+}
+
 
 // Gets a list of active users from the server
 function fetchActiveUsers() {
@@ -293,7 +330,7 @@ function updateUserList(userList){
                     chatTitle.textContent = selectedRecipient;
 
                     clearMessages()
-
+                    removeMessageIcon(selectedRecipient)
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
                 });
@@ -320,7 +357,7 @@ function addListenerToGroupChat(){
             let chatTitle = document.querySelector(".chat-title");
             chatTitle.textContent = selectedRecipient;
             
-            
+            removeMessageIcon("Groupchat")
             clearMessages()
             console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
             showMessageList(senderName, selectedRecipient)
