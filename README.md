@@ -3,7 +3,7 @@
 
 
 # Chat-Application
-Eine Echtzeit-Chat-Anwendung, die mit Spring Boot und WebSocket entwickelt wurde. Online-Benutzer können sowohl in einem gemeinsamen Gruppenchat als auch 1-zu-1 Gespräche führen.
+Eine Echtzeit-Chat-Anwendung, die mit Spring Boot und WebSocket entwickelt wurde. Online-Benutzer können sowohl in einem gemeinsamen Gruppenchat als auch 1-zu-1 Gespräche führen. Es kommen noch Änderungen dazu.
 
 ## Tech-Stack
 Java, Spring Boot, HTML, CSS, JavaScript
