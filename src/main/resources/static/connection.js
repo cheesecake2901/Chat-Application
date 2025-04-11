@@ -24,22 +24,24 @@ function connect() {
         setConnected(true);
         stompClient.subscribe("/user/queue/messages", function (message) {
             message = JSON.parse(message.body);
-
+            console.warn("Private message, selectedRec: " + selectedRecipient)
             if(selectedRecipient != "Groupchat"){
                 showMessage(message,  false);
             }
             else{
                 addMessage(message.senderName, message.recipientName, message.content)
+                newMessageIcon(message.senderName)
             }
         });
         stompClient.subscribe("/topic/groupchat", function (message) {
             message = JSON.parse(message.body);
-
-            if(message.recipientName == "Groupchat"){
+            console.warn("Groupchat message, selectedRec: " + selectedRecipient)
+            if(selectedRecipient == "Groupchat"){
                 showMessage(message,  false);
             }
             else{
-                addMessage(message.senderName, message.recipientName, message.content)
+                addMessage(message.senderName, message.recipientName, message.content);
+                newMessageIcon("Groupchat");
             }
         });
         stompClient.subscribe("/topic/activeUsers", function (message) {
@@ -53,6 +55,42 @@ function connect() {
     });
 }
 
+
+function newMessageIcon(username){
+    console.warn("New Message Icon")
+    var userElement = document.querySelector(`[data-username="${username}"]`);
+    if (userElement) {
+        var flexDiv = userElement.querySelector('.d-flex');
+        var blueDot = document.createElement("span");
+        blueDot.className = "blue-dot";
+        blueDot.style.width = "15px";
+        blueDot.style.height = "15px";
+        blueDot.style.borderRadius = "50%";
+        blueDot.style.background = "#0d92f9";
+        userElement.appendChild(blueDot);
+        userElement.style.position = "relative";
+        blueDot.style.position = "absolute";
+        blueDot.style.right = "20%";
+        blueDot.style.top = "50%";
+        blueDot.style.transform = "translateY(-50%)";
+    }
+    else{
+        console.error("Could not find user element with name " + username)
+    }
+}
+
+function removeMessageIcon(username) {
+    var userElement = document.querySelector(`[data-username="${username}"]`);
+    if (userElement) {
+        var blueDot = userElement.querySelector('.blue-dot');
+        if (blueDot) {
+            userElement.removeChild(blueDot);
+        }
+    }
+}
+
+
+// Gets a list of active users from the server
 function fetchActiveUsers() {
     fetch('/activeUsers')
         .then(response => response.json())
@@ -154,12 +192,15 @@ function showMessage(message, isMessageHistory) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+// Sends a message to the server, where they are distributed to other clients
 function sendMessage() {
     if (!stompClient || !stompClient.connected) {
         alert("Not connected to WebSocket server!");
         return;
     }
     var senderName = document.getElementById("senderInput").value;
+
+    // We use the recipientName to decide who messages are sent to by the server
     //var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
     //var recipientName = "User123"; <--- Example
     var recipientName = selectedRecipient;
@@ -170,9 +211,6 @@ function sendMessage() {
     }
 
     var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
-
-    
-    
 
     if(recipientName == "Groupchat"){
         console.info("Sending Groupchat")
@@ -251,9 +289,9 @@ function saveUsernameInput() {
         console.error("Could not find username input to save.");
     }
 }
-
+// We run this once on initial load, to grab the cookie if it exists
 checkAndReplaceUsernameInput();
-
+// Then we save the last input username when logging in
 senderInput.addEventListener("change", function(){
     saveUsernameInput();
 });
@@ -292,7 +330,7 @@ function updateUserList(userList){
                     chatTitle.textContent = selectedRecipient;
 
                     clearMessages()
-
+                    removeMessageIcon(selectedRecipient)
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
                 });
@@ -303,7 +341,7 @@ function updateUserList(userList){
             }
     });
 }
-
+// Adds an event Listener to the Group Chat Element on initial load, so we can switch between chats
 function addListenerToGroupChat(){
     const groupChatElement = document.getElementById("groupchat-class");
         console.log("Event listener added to:", groupChatElement);
@@ -319,7 +357,7 @@ function addListenerToGroupChat(){
             let chatTitle = document.querySelector(".chat-title");
             chatTitle.textContent = selectedRecipient;
             
-            
+            removeMessageIcon("Groupchat")
             clearMessages()
             console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
             showMessageList(senderName, selectedRecipient)
