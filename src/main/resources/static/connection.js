@@ -23,10 +23,10 @@ function connect() {
     stompClient.connect({username: senderName}, function (frame) {
         setConnected(true);
         stompClient.subscribe("/user/queue/messages", function (message) {
-            showMessage(JSON.parse(message.body));
+            showMessage(JSON.parse(message.body), false);
         });
         stompClient.subscribe("/topic/groupchat", function (message) {
-            showMessage(JSON.parse(message.body));
+            showMessage(JSON.parse(message.body),  false);
         });
         stompClient.subscribe("/topic/activeUsers", function (message) {
             updateUserList(JSON.parse(message.body));
@@ -93,19 +93,22 @@ function showMessageList(senderName, recipientName){
         messageList[messageKey].forEach((message, index) => console.log(message)
         );
         //messageList[messageKey].forEach((message, index) => console.log(`Message ${index + 1}: ${message[2]} (from ${message[0]} to ${message[1]})`)
-        messageList[messageKey].forEach((message, index) => showMessage(message)
+        messageList[messageKey].forEach((message, index) => showMessage(message, true)
         );
     }
 
 }
 
 
-function showMessage(message) {
+function showMessage(message, isMessageHistory) {
     var chatContainer = document.getElementById("msg-page");
     var messageElement = document.createElement("div");
     console.log("Received message: ", message);
 
-    addMessage(message.senderName, message.recipientName, message.content)
+    if(!isMessageHistory){
+        addMessage(message.senderName, message.recipientName, message.content)
+    }
+    
 
     if (message.senderName === senderName) {
         messageElement.className = "outgoing-chats";
@@ -171,6 +174,14 @@ function sendMessage() {
 }
 
 document.getElementById("sendMessage").onclick = sendMessage;
+
+
+
+function clearMessages(){
+    var chatContainer = document.getElementById("msg-page");
+    chatContainer.innerHTML = "";
+}
+
 
 // Cookie stuff
 //------------------------------------------------
@@ -259,12 +270,17 @@ function updateUserList(userList){
                 userElement.addEventListener("click", function () {
                     const clickedUsername = this.getAttribute("data-username");
 
+                    if(selectedRecipient == clickedUsername){
+                        console.log("Selected current user, doing nothing")
+                        return
+                    }
+
                     selectedRecipient = clickedUsername;
                     console.log("Selected recipient changed to:", selectedRecipient);
                     let chatTitle = document.querySelector(".chat-title");
                     chatTitle.textContent = selectedRecipient;
 
-                    // TODO: Hide/Delete old messages
+                    clearMessages()
 
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
@@ -274,13 +290,18 @@ function updateUserList(userList){
                 console.log("Event listener added to:", groupChatElement);
                 groupChatElement.addEventListener("click", function(){
                     
+                    if(selectedRecipient == "Groupchat"){
+                        console.log("Selected current user, doing nothing")
+                        return
+                    }
+
                     selectedRecipient = "Groupchat"
                     console.log("Selected recipient changed to:", selectedRecipient);
                     let chatTitle = document.querySelector(".chat-title");
                     chatTitle.textContent = selectedRecipient;
                     
-                    // TODO: Hide/Delete old messages
                     
+                    clearMessages()
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
                 })
