@@ -1,6 +1,5 @@
 # Chat-Application
-
-Eine moderne Chat-Anwendung entwickelt mit Spring Boot und WebSocket. Derzeit können Benutzer einem gemeinsamen Chat-Raum beitreten und in Echtzeit miteinander kommunizieren. Zukünftig wird die Möglichkeit implementiert, eigene private Chaträume zu erstellen, um gezielte Gespräche zu führen.
+Eine Echtzeit-Chat-Anwendung, die mit Spring Boot und WebSocket entwickelt wurde. Online-Benutzer können sowohl in einem gemeinsamen Gruppenchat als auch 1-zu-1 Gespräche führen.
 
 ## Tech-Stack
 Java, Spring Boot, WebSocket, HTML, CSS, JavaScript
