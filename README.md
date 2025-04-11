@@ -1,3 +1,7 @@
+
+<img src="/screenshot.png" width="350" height="450">
+
+
 # Chat-Application
 Eine Echtzeit-Chat-Anwendung, die mit Spring Boot und WebSocket entwickelt wurde. Online-Benutzer können sowohl in einem gemeinsamen Gruppenchat als auch 1-zu-1 Gespräche führen.
 
