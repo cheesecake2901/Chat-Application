@@ -165,7 +165,7 @@ function showMessage(message, isMessageHistory) {
     if (message.senderName === senderName) {
         messageElement.innerHTML =
                     `<div class="chat-message-right mb-4">
-                      <div>
+                      <div class="d-flex flex-column align-items-center">
                         <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
                         <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
                       </div>
@@ -177,7 +177,7 @@ function showMessage(message, isMessageHistory) {
     } else {
         messageElement.innerHTML = `
                     <div class="chat-message-left pb-4">
-                      <div>
+                      <div class="d-flex flex-column align-items-center">
                         <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
                         <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
                       </div>
