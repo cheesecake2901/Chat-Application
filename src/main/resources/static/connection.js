@@ -265,7 +265,7 @@ function updateUserList(userList){
                                 </div>
                             </div>
                         </a>`;
-                // Event Listener nach dem Einfügen binden
+                // Adds Event Listeners to the user element, so we can switch between chats
                 const userElement = userList.querySelector(".user-entry");
                 userElement.addEventListener("click", function () {
                     const clickedUsername = this.getAttribute("data-username");
@@ -285,7 +285,7 @@ function updateUserList(userList){
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
                 });
-
+                
                 const groupChatElement = document.querySelector(".groupchat-user");
                 console.log("Event listener added to:", groupChatElement);
                 groupChatElement.addEventListener("click", function(){
