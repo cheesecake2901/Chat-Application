@@ -285,30 +285,34 @@ function updateUserList(userList){
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
                     showMessageList(senderName, selectedRecipient)
                 });
-                
-                const groupChatElement = document.querySelector(".groupchat-user");
-                console.log("Event listener added to:", groupChatElement);
-                groupChatElement.addEventListener("click", function(){
-                    
-                    if(selectedRecipient == "Groupchat"){
-                        console.log("Selected current user, doing nothing")
-                        return
-                    }
 
-                    selectedRecipient = "Groupchat"
-                    console.log("Selected recipient changed to:", selectedRecipient);
-                    let chatTitle = document.querySelector(".chat-title");
-                    chatTitle.textContent = selectedRecipient;
-                    
-                    
-                    clearMessages()
-                    console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
-                    showMessageList(senderName, selectedRecipient)
-                })
+                
 
                 otherUsernames.appendChild(userList);
             }
     });
 }
 
+function addListenerToGroupChat(){
+    const groupChatElement = document.querySelector(".groupchat-user");
+        console.log("Event listener added to:", groupChatElement);
+        groupChatElement.addEventListener("click", function(){
+            
+            if(selectedRecipient == "Groupchat"){
+                console.log("Selected current user, doing nothing")
+                return
+            }
 
+            selectedRecipient = "Groupchat"
+            console.log("Selected recipient changed to:", selectedRecipient);
+            let chatTitle = document.querySelector(".chat-title");
+            chatTitle.textContent = selectedRecipient;
+            
+            
+            clearMessages()
+            console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
+            showMessageList(senderName, selectedRecipient)
+        })
+}
+
+addListenerToGroupChat()
