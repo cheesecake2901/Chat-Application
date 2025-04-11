@@ -53,6 +53,7 @@ function connect() {
     });
 }
 
+// Gets a list of active users from the server
 function fetchActiveUsers() {
     fetch('/activeUsers')
         .then(response => response.json())
@@ -156,12 +157,15 @@ function showMessage(message, isMessageHistory) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
+// Sends a message to the server, where they are distributed to other clients
 function sendMessage() {
     if (!stompClient || !stompClient.connected) {
         alert("Not connected to WebSocket server!");
         return;
     }
     var senderName = document.getElementById("senderInput").value;
+
+    // We use the recipientName to decide who messages are sent to by the server
     //var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
     //var recipientName = "User123"; <--- Example
     var recipientName = selectedRecipient;
@@ -172,9 +176,6 @@ function sendMessage() {
     }
 
     var chatMessage = { senderName: senderName, recipientName: recipientName, content: content };
-
-    
-    
 
     if(recipientName == "Groupchat"){
         console.info("Sending Groupchat")
@@ -253,9 +254,9 @@ function saveUsernameInput() {
         console.error("Could not find username input to save.");
     }
 }
-
+// We run this once on initial load, to grab the cookie if it exists
 checkAndReplaceUsernameInput();
-
+// Then we save the last input username when logging in
 senderInput.addEventListener("change", function(){
     saveUsernameInput();
 });
@@ -305,7 +306,7 @@ function updateUserList(userList){
             }
     });
 }
-
+// Adds an event Listener to the Group Chat Element on initial load, so we can switch between chats
 function addListenerToGroupChat(){
     const groupChatElement = document.getElementById("groupchat-class");
         console.log("Event listener added to:", groupChatElement);
