@@ -50,6 +50,7 @@ function fetchActiveUsers() {
     });
 }
 
+// Adds a message to a List of Messages so they can be retrieved when switching between chats
 function addMessage(senderName, recipientName, content){
     let names = [senderName, recipientName].sort();
     let messageKey = names.join("");
@@ -75,7 +76,7 @@ function addMessage(senderName, recipientName, content){
     console.info("Added message to messageList: " + message)
 }
 
-
+// Retrieves the list of messages for this chat and displays them
 function showMessageList(senderName, recipientName){
     let names = [senderName, recipientName].sort();
     let messageKey = names.join("");
@@ -99,7 +100,7 @@ function showMessageList(senderName, recipientName){
 
 }
 
-
+// Shows a message and adds it to the list of Messages, unless we are displaying message history
 function showMessage(message, isMessageHistory) {
     var chatContainer = document.getElementById("msg-page");
     var messageElement = document.createElement("div");
@@ -176,14 +177,14 @@ function sendMessage() {
 document.getElementById("sendMessage").onclick = sendMessage;
 
 
-
+// Clears the displayed messages when switching chats
 function clearMessages(){
     var chatContainer = document.getElementById("msg-page");
     chatContainer.innerHTML = "";
 }
 
 
-// Cookie stuff
+// Cookie handling to save the last username
 //------------------------------------------------
 
 const senderInput = document.getElementById("senderInput");
@@ -247,8 +248,7 @@ senderInput.addEventListener("change", function(){
 });
 
 //------------------------------------------------
-
-// Testing for list of active users, TODO: Delete later
+// Listens for new users and adds event listeners to them, so we can switch between chats.
 function updateUserList(userList){
         var otherUsernames = document.getElementById("otherUsers");
         otherUsernames.innerHTML = "";
