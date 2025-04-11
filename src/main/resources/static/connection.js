@@ -307,7 +307,7 @@ function updateUserList(userList){
 }
 
 function addListenerToGroupChat(){
-    const groupChatElement = document.querySelector(".groupchat-user");
+    const groupChatElement = document.getElementById("groupchat-class");
         console.log("Event listener added to:", groupChatElement);
         groupChatElement.addEventListener("click", function(){
             
