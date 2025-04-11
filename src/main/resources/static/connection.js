@@ -55,7 +55,7 @@ function connect() {
     });
 }
 
-
+// Adds an Icon to a user if new Messages are available
 function newMessageIcon(username){
     console.warn("New Message Icon")
     var userElement = document.querySelector(`[data-username="${username}"]`);
@@ -79,6 +79,7 @@ function newMessageIcon(username){
     }
 }
 
+// Removes the New Message Icon when the user is selected
 function removeMessageIcon(username) {
     var userElement = document.querySelector(`[data-username="${username}"]`);
     if (userElement) {
