@@ -23,10 +23,24 @@ function connect() {
     stompClient.connect({username: senderName}, function (frame) {
         setConnected(true);
         stompClient.subscribe("/user/queue/messages", function (message) {
-            showMessage(JSON.parse(message.body), false);
+            message = JSON.parse(message.body);
+
+            if(selectedRecipient != "Groupchat"){
+                showMessage(message,  false);
+            }
+            else{
+                addMessage(message.senderName, message.recipientName, message.content)
+            }
         });
         stompClient.subscribe("/topic/groupchat", function (message) {
-            showMessage(JSON.parse(message.body),  false);
+            message = JSON.parse(message.body);
+
+            if(message.recipientName == "Groupchat"){
+                showMessage(message,  false);
+            }
+            else{
+                addMessage(message.senderName, message.recipientName, message.content)
+            }
         });
         stompClient.subscribe("/topic/activeUsers", function (message) {
             updateUserList(JSON.parse(message.body));
@@ -93,7 +107,6 @@ function showMessageList(senderName, recipientName){
         console.log("Messages between " + senderName + " and " + recipientName + " with Key " + messageKey);
         messageList[messageKey].forEach((message, index) => console.log(message)
         );
-        //messageList[messageKey].forEach((message, index) => console.log(`Message ${index + 1}: ${message[2]} (from ${message[0]} to ${message[1]})`)
         messageList[messageKey].forEach((message, index) => showMessage(message, true)
         );
     }
