@@ -1,6 +1,8 @@
-body{
-    margin-top:20px;
+html, body {
+    height: 100%;
+    margin: 0;
 }
+
 
 
 .custom-bg {
@@ -28,8 +30,8 @@ body{
 .chat-messages {
     display: flex;
     flex-direction: column;
-    height: 500px;
-    max-height: 500px;
+    height: 80vh;
+    max-height: 80vh;
     overflow-y: scroll
 }
 
@@ -60,4 +62,12 @@ body{
 }
 .border-top {
     border-top: 1px solid #dee2e6!important;
+}
+
+#chat-page {
+    height: 100%;
+}
+
+.container-fluid, .card, .row {
+    height: 100%;
 }
