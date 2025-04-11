@@ -9,7 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-//führt Messages zum richtigen Ort
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override

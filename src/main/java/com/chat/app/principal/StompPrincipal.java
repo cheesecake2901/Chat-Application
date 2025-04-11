@@ -3,6 +3,8 @@ package com.chat.app.principal;
 import java.security.Principal;
 import java.util.logging.Logger;
 
+// User management for our message queue
+
 public class StompPrincipal implements Principal {
     public final String name;
 

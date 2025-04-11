@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
-// This service manages the list of active user sessions
+// This service manages the list of active user sessions, so the client can retrieve a list of them
 @Service
 public class ActiveUserSessionService {
     private final Map<String, String> activeSessions = new ConcurrentHashMap<>();

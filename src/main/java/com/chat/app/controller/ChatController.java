@@ -31,6 +31,7 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
+    // Used for private messages between users
     @MessageMapping("/sendMessage")
     public void sendMessage(Message message){
         logger.info("Message received: " + message);
@@ -40,6 +41,7 @@ public class ChatController {
         messagingTemplate.convertAndSendToUser(message.getSenderName(), "/queue/messages", message);
     }
 
+    // Used for groupchat messages
     @MessageMapping("/sendGroupchat")
     @SendTo("/topic/groupchat")
     public Message sendGroupchatMessage(Message message){
