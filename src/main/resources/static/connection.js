@@ -62,7 +62,6 @@ function getOrGenerateProfilePicture(username){
         const wrapper = document.createElement("div");
         wrapper.classList.add('profile-picture');
 
-        console.log("TODO: Add Groupchat Image here")
         const groupChatImage = document.createElement("img");
         groupChatImage.src = "user.png"; // Path to your specific image for Groupchat
         groupChatImage.alt = "Groupchat";
