@@ -111,17 +111,9 @@ function newMessageIcon(username){
     if (userElement) {
         var flexDiv = userElement.querySelector('.d-flex');
         var blueDot = document.createElement("span");
-        blueDot.className = "blue-dot";
-        blueDot.style.width = "15px";
-        blueDot.style.height = "15px";
-        blueDot.style.borderRadius = "50%";
-        blueDot.style.background = "#0d92f9";
+        blueDot.classList.add("blue-dot");
         userElement.appendChild(blueDot);
-        userElement.style.position = "relative";
-        blueDot.style.position = "absolute";
-        blueDot.style.right = "20%";
-        blueDot.style.top = "50%";
-        blueDot.style.transform = "translateY(-50%)";
+
     }
     else{
         console.error("Could not find user element with name " + username)
