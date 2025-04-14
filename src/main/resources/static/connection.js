@@ -217,7 +217,6 @@ function showMessage(message, isMessageHistory) {
                       </div>
                     </div>`
     } else {
-        //<img src="user.png" class="rounded-circle mr-1" width="40" height="40">
         messageElement.innerHTML = `
                     <div class="chat-message-left pb-4">
                       <div class="d-flex flex-column align-items-center">
@@ -420,3 +419,4 @@ function addListenerToGroupChat(){
 }
     
 addListenerToGroupChat()
+changeChatTitleImage("Groupchat");
