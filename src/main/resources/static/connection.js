@@ -202,7 +202,7 @@ function showMessage(message, isMessageHistory) {
     if(!isMessageHistory){
         addMessage(message.senderName, message.recipientName, message.content)
     }
-    
+    const contentWithLineBreaks = message.content.replace(/\n/g, '<br>');
 
     if (message.senderName === senderName) {
         messageElement.innerHTML =
@@ -213,7 +213,7 @@ function showMessage(message, isMessageHistory) {
                       </div>
                       <div class="chat-color-right flex-shrink-1 rounded py-2 px-3 mr-3">
                         <div class="font-weight-bold mb-1">You</div>
-                        ${message.content}
+                        ${contentWithLineBreaks}
                       </div>
                     </div>`
     } else {
@@ -226,7 +226,7 @@ function showMessage(message, isMessageHistory) {
                       </div>
                       <div class="chat-color-left flex-shrink-1 rounded py-2 px-3 ml-3">
                         <div class="font-weight-bold mb-1">${message.senderName}</div>
-                        ${message.content}
+                        ${contentWithLineBreaks}
                       </div>
                     </div>`
     }
@@ -417,6 +417,5 @@ function addListenerToGroupChat(){
             showMessageList(senderName, selectedRecipient);
         })
 }
-    
 addListenerToGroupChat()
 changeChatTitleImage("Groupchat");

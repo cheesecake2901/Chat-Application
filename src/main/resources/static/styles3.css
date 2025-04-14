@@ -110,3 +110,9 @@ html, body {
     text-transform: uppercase;
     user-select: none;
   }
+
+.scroll {
+    resize: none!important;
+    overflow-y: scroll!important;
+
+}
