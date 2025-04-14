@@ -24,7 +24,7 @@ function connect() {
         setConnected(true);
         stompClient.subscribe("/user/queue/messages", function (message) {
             message = JSON.parse(message.body);
-            console.warn("Private message, selectedRec: " + selectedRecipient)
+            console.log("Private message, selectedRec: " + selectedRecipient)
             if(selectedRecipient != "Groupchat"){
                 showMessage(message,  false);
             }
@@ -106,7 +106,7 @@ function changeChatTitleImage(username){
 
 // Adds an Icon to a user if new Messages are available
 function newMessageIcon(username){
-    console.warn("New Message Icon")
+    console.info("New Message Icon");
     let userElement = document.querySelector(`[data-username="${username}"]`);
     if (userElement) {
         let flexDiv = userElement.querySelector('.d-flex');
