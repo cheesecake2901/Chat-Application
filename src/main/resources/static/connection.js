@@ -107,10 +107,10 @@ function changeChatTitleImage(username){
 // Adds an Icon to a user if new Messages are available
 function newMessageIcon(username){
     console.warn("New Message Icon")
-    var userElement = document.querySelector(`[data-username="${username}"]`);
+    let userElement = document.querySelector(`[data-username="${username}"]`);
     if (userElement) {
-        var flexDiv = userElement.querySelector('.d-flex');
-        var blueDot = document.createElement("span");
+        let flexDiv = userElement.querySelector('.d-flex');
+        let blueDot = document.createElement("span");
         blueDot.classList.add("blue-dot");
         userElement.appendChild(blueDot);
 
@@ -122,9 +122,9 @@ function newMessageIcon(username){
 
 // Removes the New Message Icon when the user is selected
 function removeMessageIcon(username) {
-    var userElement = document.querySelector(`[data-username="${username}"]`);
+    let userElement = document.querySelector(`[data-username="${username}"]`);
     if (userElement) {
-        var blueDot = userElement.querySelector('.blue-dot');
+        let blueDot = userElement.querySelector('.blue-dot');
         if (blueDot) {
             userElement.removeChild(blueDot);
         }
@@ -195,8 +195,8 @@ function showMessageList(senderName, recipientName){
 
 // Shows a message and adds it to the list of Messages, unless we are displaying message history
 function showMessage(message, isMessageHistory) {
-    var chatContainer = document.getElementById("msg-page");
-    var messageElement = document.createElement("div");
+    let chatContainer = document.getElementById("msg-page");
+    let messageElement = document.createElement("div");
     console.log("Received message: ", message);
 
     if(!isMessageHistory){
@@ -244,13 +244,13 @@ function sendMessage() {
         alert("Not connected to WebSocket server!");
         return;
     }
-    var senderName = document.getElementById("senderInput").value;
+    let senderName = document.getElementById("senderInput").value;
 
     // We use the recipientName to decide who messages are sent to by the server
     //var recipientName = "Groupchat"; // Messages that are sent to "Groupchat" are sent to all, whereas a specific username only sends that message to that user
     //var recipientName = "User123"; <--- Example
-    var recipientName = selectedRecipient;
-    var content = document.getElementById("messageInput").value;
+    let recipientName = selectedRecipient;
+    let content = document.getElementById("messageInput").value;
     if (!senderName || !content) {
         alert("Please enter a name and a message!");
         return;
@@ -274,7 +274,7 @@ document.getElementById("sendMessage").onclick = sendMessage;
 
 // Clears the displayed messages when switching chats
 function clearMessages(){
-    var chatContainer = document.getElementById("msg-page");
+    let chatContainer = document.getElementById("msg-page");
     chatContainer.innerHTML = "";
 }
 
