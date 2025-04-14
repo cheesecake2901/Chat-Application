@@ -64,6 +64,17 @@ html, body {
     border-top: 1px solid #dee2e6!important;
 }
 
+.blue-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: #0d92f9;
+    position: absolute;
+    right: 20%;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
 #chat-page {
     height: 100%;
 }
