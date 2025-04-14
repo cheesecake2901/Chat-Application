@@ -4,7 +4,7 @@ var stompClient = null;
 var senderName = null;
 var selectedRecipient = "Groupchat";
 var messageList = [];
-
+var profilePicDict = {};
 
 
 function setConnected(connected) {
@@ -49,10 +49,59 @@ function connect() {
         });
         fetchActiveUsers();
 
-
     }, function (error) {
         console.error("WebSocket Error: ", error);
     });
+}
+
+// Generate the users profile picture with the first letter of the Username
+function getOrGenerateProfilePicture(username){
+
+    if(username == "Groupchat"){
+        // We need to wrap the image in a wrapper to ensure we can replace it later
+        const wrapper = document.createElement("div");
+        wrapper.classList.add('profile-picture');
+
+        console.log("TODO: Add Groupchat Image here")
+        const groupChatImage = document.createElement("img");
+        groupChatImage.src = "user.png"; // Path to your specific image for Groupchat
+        groupChatImage.alt = "Groupchat";
+        groupChatImage.className = "rounded-circle mr-1"; // Apply your desired classes
+        groupChatImage.width = 50;
+        groupChatImage.height = 50;
+        wrapper.appendChild(groupChatImage);
+        return wrapper;
+    }
+
+    if(!profilePicDict[username]){
+
+        
+
+        console.info("Generating Profile Picture for user " + username)
+        let firstLetter = username.charAt(0).toUpperCase();
+        const profilePicElement = document.createElement('div');
+        profilePicElement.classList.add('profile-picture');
+        profilePicElement.textContent = firstLetter;
+    
+        profilePicDict[username] = profilePicElement;
+    }
+
+    
+    return profilePicDict[username].cloneNode(true);
+
+}
+
+function changeChatTitleImage(username){
+    let chatTitle = document.querySelector(".chat-title-image");
+    profilePicElement = getOrGenerateProfilePicture(username);
+    const oldProfilePic = chatTitle.querySelector('.profile-picture')
+
+    if (oldProfilePic) {
+        chatTitle.replaceChild(profilePicElement, oldProfilePic);
+      } else {
+        console.info('No profile picture element found within chat Title. Adding a new picture.');
+        chatTitle.appendChild(profilePicElement);
+    }
 }
 
 // Adds an Icon to a user if new Messages are available
@@ -167,7 +216,7 @@ function showMessage(message, isMessageHistory) {
         messageElement.innerHTML =
                     `<div class="chat-message-right mb-4">
                       <div class="d-flex flex-column align-items-center">
-                        <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
+                        <div class="profile-img-placeholder"></div>
                         <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
                       </div>
                       <div class="chat-color-right flex-shrink-1 rounded py-2 px-3 mr-3">
@@ -176,10 +225,12 @@ function showMessage(message, isMessageHistory) {
                       </div>
                     </div>`
     } else {
+        //<img src="user.png" class="rounded-circle mr-1" width="40" height="40">
         messageElement.innerHTML = `
                     <div class="chat-message-left pb-4">
                       <div class="d-flex flex-column align-items-center">
-                        <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
+                      <div class="profile-img-placeholder"></div>  
+                      
                         <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleTimeString()}</div>
                       </div>
                       <div class="chat-color-left flex-shrink-1 rounded py-2 px-3 ml-3">
@@ -188,6 +239,9 @@ function showMessage(message, isMessageHistory) {
                       </div>
                     </div>`
     }
+    const profilePlaceholder = messageElement.querySelector(".profile-img-placeholder");
+    const profilePic = getOrGenerateProfilePicture(message.senderName);
+    profilePlaceholder.replaceWith(profilePic);
 
     chatContainer.appendChild(messageElement);
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -309,19 +363,25 @@ function updateUserList(userList){
                 userList.innerHTML = `
                         <a class="list-group-item list-group-item-action border-0 rounded-pill mt-2 user-entry" data-username="${username}">
                             <div class="d-flex align-items-center">
-                                <img src="user.png" class="rounded-circle mr-1" width="40" height="40">
+                                <div class="profile-img-placeholder"></div>
                                     <div class="flex-grow-1 ml-3">
                                     ${username}
                                 </div>
                             </div>
                         </a>`;
+                    
+                // Add Profile Picture
+                const profilePlaceholder = userList.querySelector(".profile-img-placeholder");
+                const profilePic = getOrGenerateProfilePicture(username);
+                profilePlaceholder.replaceWith(profilePic);
+                
                 // Adds Event Listeners to the user element, so we can switch between chats
                 const userElement = userList.querySelector(".user-entry");
                 userElement.addEventListener("click", function () {
                     const clickedUsername = this.getAttribute("data-username");
 
                     if(selectedRecipient == clickedUsername){
-                        console.log("Selected current user, doing nothing")
+                        console.log("Selected current user, doing nothing");
                         return
                     }
 
@@ -329,11 +389,12 @@ function updateUserList(userList){
                     console.log("Selected recipient changed to:", selectedRecipient);
                     let chatTitle = document.querySelector(".chat-title");
                     chatTitle.textContent = selectedRecipient;
+                    changeChatTitleImage(selectedRecipient);
 
-                    clearMessages()
-                    removeMessageIcon(selectedRecipient)
+                    clearMessages();
+                    removeMessageIcon(selectedRecipient);
                     console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
-                    showMessageList(senderName, selectedRecipient)
+                    showMessageList(senderName, selectedRecipient);
                 });
 
                 
@@ -357,12 +418,13 @@ function addListenerToGroupChat(){
             console.log("Selected recipient changed to:", selectedRecipient);
             let chatTitle = document.querySelector(".chat-title");
             chatTitle.textContent = selectedRecipient;
-            
-            removeMessageIcon("Groupchat")
-            clearMessages()
+            changeChatTitleImage("Groupchat");
+
+            removeMessageIcon("Groupchat");
+            clearMessages();
             console.log("Displaying Message history between " + senderName + " and " + selectedRecipient);
-            showMessageList(senderName, selectedRecipient)
+            showMessageList(senderName, selectedRecipient);
         })
 }
-
+    
 addListenerToGroupChat()
